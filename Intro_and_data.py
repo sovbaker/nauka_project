@@ -32,9 +32,47 @@ with st.echo(code_location='below'):
     **Для тех, кто на самом деле считает строки кода:** 
     - Во 1) вы душнила, 
     - во 2) кода в юпитере много, но я там не помечал заимстования, поэтому весь важный код оттуда будет здесь 
+    За основу были взяты данные delivery club
+    ```python
+    ##FROM откуда-то со стэковерфлоу
+    import glob
+    import pandas as pd
     
+    # Get CSV files list from a folder
+    path = '/Users/olegbaranov/Downloads/csv/delivery2_full'
+    csv_files = glob.glob(path + "/*.csv")
     
+    # Read each CSV file into DataFrame
+    # This creates a list of dataframes
+    df_list = (pd.read_csv(file, dtype={'phone_number':'int'}, on_bad_lines='skip', low_memory=False) for file in csv_files)
     
+    # Concatenate all DataFrames
+    big_df_delivery= pd.concat(df_list, ignore_index=True)
+    ##
+    ```   
+    Берем данные только из Москвы и группируем по user_id телефону и адресу, чтоб получить уникальных пользователей
+    ```python
+    df_for_address_parse=big_df_delivery
+    .query('delivery2_address_city=="Москва"')
+    .groupby(['delivery2_user_id'
+        , 'phone_number'
+        , 'delivery2_address_street'
+        , 'delivery2_address_building'
+        ,'delivery2_address_flat_number'], as_index=False)['delivery2_price_client_rub'].sum()
+    ```
+    Хотим спарсить с сайта ЦИК участковые избирательные комиссии для адресов
+    мы хотим привести адрес к виду, близкому тому что хочет ЦИК, так как он не любит например адреса с корпусами
+    , строениями, а также со словом набережная.
+    Для этого мы берем и с помощью ***продвинутых возможностей pandas*** и ***регулярных выражений (для решения задачи
+    , для которой трудно придумать простое решение без регулярных выражений)*** выделяем номер дома, корпус или строение
+    ```pandas 
+    df_for_address_parse=(df_for_address_parse
+                      .merge((df_for_address_parse
+                            .delivery2_address_building
+                            .str.extract(r'(\d?\d?\d?\d?\d?)([кcстр]?)(\d?\d?\d?\d?\d?\d?)')
+                            .rename(columns={0:'bulding_num', 1:'suffix', 2:'suffix_num'}))
+                            , left_index=True, right_index=True))
+    ```
     
     """
 
