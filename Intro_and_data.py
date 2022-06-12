@@ -20,7 +20,7 @@ import requests
 st.set_page_config(layout="wide")
 with st.echo(code_location='below'):
     """
-    >Ты есть то, что ты ешь
+    *>Ты есть то, что ты ешь*
     Это цитата какого-то умного древнего грека, которая к мне кажется хорошо описывает мой проект
     В прошлый раз я делал анализ данных слива Яндекс Еды. В этот раз мой проект будет основывааться на сливе данных
     Деливери клаб. Я попытаюсь найти связя между тем, сколько люди тратят на еду и тем как они голосуют на выборах
@@ -30,7 +30,7 @@ with st.echo(code_location='below'):
     вкратце опишу, что происходило с данными.
     
     **Для тех, кто на самом деле считает строки кода:** 
-    - Во 1) вы душнила, 
+    - Во 1) вы душнила 
     - во 2) кода в юпитере много, но я там не помечал заимстования, поэтому весь важный код оттуда будет здесь 
     За основу были взяты данные delivery club
     ```python
@@ -60,12 +60,12 @@ with st.echo(code_location='below'):
         , 'delivery2_address_building'
         ,'delivery2_address_flat_number'], as_index=False)['delivery2_price_client_rub'].sum()
     ```
-    Хотим спарсить с сайта ЦИК участковые избирательные комиссии для адресов
+    #### Хотим спарсить с сайта ЦИК участковые избирательные комиссии для адресов
     мы хотим привести адрес к виду, близкому тому что хочет ЦИК, так как он не любит например адреса с корпусами
     , строениями, а также со словом набережная.
     Для этого мы берем и с помощью ***продвинутых возможностей pandas*** и ***регулярных выражений (для решения задачи
     , для которой трудно придумать простое решение без регулярных выражений)*** выделяем номер дома, корпус или строение
-    ```pandas 
+    ```python 
     df_for_address_parse=(df_for_address_parse
                       .merge((df_for_address_parse
                             .delivery2_address_building
@@ -73,8 +73,144 @@ with st.echo(code_location='below'):
                             .rename(columns={0:'bulding_num', 1:'suffix', 2:'suffix_num'}))
                             , left_index=True, right_index=True))
     ```
-    
+    ### Неоптимальный вариант выполнения этой задачи с помощью web scrapping
+    ```python
+    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+        driver.get('http://www.cikrf.ru/digital-services/naydi-svoy-izbiratelnyy-uchastok/')
+        from selenium.webdriver.common.keys import Keys
+        from selenium.common.exceptions import ElementClickInterceptedException, NoSuchElementException, StaleElementReferenceException
+        from time import sleep, time
+        
+        tnow=time()
+        for idx, row in df_for_address_parse.iterrows():
+        city='Город Москва, '
+        street=str(row.delivery2_address_street)+', '
+        if len(row.suffix)!=1:
+            building='д. '+str(row.bulding_num)
+        else:
+            building='д. '+str(row.bulding_num)+' '+str(row.suffix)+'. '+str(row.suffix_num)
+        flat=', '+'кв. ' + str(row.delivery2_address_flat_number)
+        try:
+            try:
+                search_element=driver.find_element(By.XPATH, "//*[@class='form-control address-select2 address-selected']")
+                search_element.clear()
+                sleep(0.1)
+                search_element.send_keys(city+street+building+flat)
+                sleep(0.5)
+                search_element.send_keys(Keys.ENTER)
+                search_button=driver.find_element(By.ID, 'send')
+                try:
+                    search_button.click()
+                    sleep(1)
+                    if len (driver.find_elements(By.XPATH, "//h4[@class='digital-subtitle']"))>2:
+                        result=driver.find_elements(By.XPATH, "//h4[@class='digital-subtitle']")[2].text
+                    else:
+                        search_element.clear()
+                        search_element.send_keys(city+street+building)
+                        sleep(0.3)
+                        search_element.send_keys(Keys.ARROW_DOWN)
+                        search_element.send_keys(Keys.ARROW_DOWN)
+                        sleep(0.3)
+                        search_element.send_keys(Keys.ENTER)
+                        sleep(0.3)
+                        search_button.click()
+                        sleep(1)
+                        result_list=driver.find_elements(By.XPATH, "//h4[@class='digital-subtitle']")
+                        for x in result_list:
+                            if len(x.text)>0:
+                                result=x.text
+                            else:
+                                result='null'
+                except ElementClickInterceptedException:
+                    search_element.clear()
+                    search_element.send_keys(city+street+building)
+                    sleep(0.3)
+                    search_element.send_keys(Keys.ARROW_DOWN)
+                    search_element.send_keys(Keys.ARROW_DOWN)
+                    sleep(0.3)
+                    search_element.send_keys(Keys.ENTER)
+                    sleep(0.3)
+                    try:
+                        search_button.click()
+                        sleep(1)
+                        result_list=driver.find_elements(By.XPATH, "//h4[@class='digital-subtitle']")
+                        if len(result_list)>0:
+                            for x in result_list:
+                                if len(x.text)>0:
+                                    result=x.text
+                                else:
+                                    result='null'
+                        else:
+                            result='null'
+                    except ElementClickInterceptedException:
+                        result='null'
+            except NoSuchElementException:
+                search_element=driver.find_element(By.XPATH, "//*[@class='form-control address-select2']")
+                search_element.clear()
+                sleep(0.1)
+                search_element.send_keys(city+street+building+flat)
+                sleep(0.5)
+                search_element.send_keys(Keys.ENTER)
+                search_button=driver.find_element(By.ID, 'send')
+                try:
+                    search_button.click()
+                    sleep(1)
+                    if len (driver.find_elements(By.XPATH, "//h4[@class='digital-subtitle']"))>2:
+                        result=driver.find_elements(By.XPATH, "//h4[@class='digital-subtitle']")[2].text
+                    else:
+                        search_element.clear()
+                        search_element.send_keys(city+street+building)
+                        sleep(0.3)
+                        search_element.send_keys(Keys.ARROW_DOWN)
+                        search_element.send_keys(Keys.ARROW_DOWN)
+                        sleep(0.3)
+                        search_element.send_keys(Keys.ENTER)
+                        sleep(0.3)
+                        search_button.click()
+                        sleep(1)
+                        result_list=driver.find_elements(By.XPATH, "//h4[@class='digital-subtitle']")
+                        for x in result_list:
+                            if len(x.text)>0:
+                                result=x.text
+                            else:
+                                result='null'
+                except ElementClickInterceptedException:
+                    search_element.clear()
+                    sleep(0.3)
+                    search_element.send_keys(city+street+building)
+                    sleep(0.3)
+                    search_element.send_keys(Keys.ARROW_DOWN)
+                    search_element.send_keys(Keys.ARROW_DOWN)
+                    sleep(0.3)
+                    search_element.send_keys(Keys.ENTER)
+                    sleep(0.3)
+                    try:
+                        search_button.click()
+                        sleep(1)
+                        result_list=driver.find_elements(By.XPATH, "//h4[@class='digital-subtitle']")
+                        if len(result_list)>0:
+                            for x in result_list:
+                                if len(x.text)>0:
+                                    result=x.text
+                                else:
+                                    result='null'
+                        else:
+                            result='null'
+                    except ElementClickInterceptedException:
+                        result='null'
+        except:
+            result='null'
+            driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+            driver.get('http://www.cikrf.ru/digital-services/naydi-svoy-izbiratelnyy-uchastok/')
+        df_for_address_parse.at[idx, 'UIK']=result
+        driver.refresh()
+        sleep(0.5)
+        print(idx, time()-tnow)
+    ```
+    Почему неоптимальный?_
+    Потому что он парсит один адрес примерно 5 секунд
     """
+
 
 
     @st.experimental_singleton
