@@ -8,3 +8,12 @@ geopandas
 folium
 requests
 altair
+geopy
+plotly
+supabase
+rtree
+shapely
+pydeck
+numpy
+streamlit_echarts
+streamlit_folium==0.6.13
