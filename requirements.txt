@@ -1,0 +1,10 @@
+
+setuptools==58.1.0
+psycopg2-binary
+streamlit
+pandas
+pygeos
+geopandas
+folium
+requests
+altair

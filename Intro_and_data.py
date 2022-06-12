@@ -1,5 +1,5 @@
 import altair as alt
-import folium as folium
+import folium
 import geopandas as gpd
 import numpy as np
 import pandas as pd
