@@ -38,7 +38,7 @@ with st.echo(code_location='below'):
     vybory_df =get_data('''select uik, avg (delivery2_price_client_rub) as avg_spend
                             , avg(share) as umg_share 
                             from(select * from delivery a
-                                left join vybory_full b using (uik)
+                                left join vybory_ful b using (uik)
                                 where b.umg_flg=1) as a
                                 group by 1''')
     """
