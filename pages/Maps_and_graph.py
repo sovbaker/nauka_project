@@ -7,8 +7,8 @@ from shapely.wkt import loads
 from streamlit_folium import folium_static
 import networkx as nx
 from pyvis.network import Network
-"""# Здесь мы будем рисовать карту и граф"""
 
+"""# Здесь мы будем рисовать карту и граф"""
 
 with st.echo(code_location='below'):
     @st.experimental_singleton
@@ -31,6 +31,8 @@ with st.echo(code_location='below'):
     @st.experimental_singleton()
     def get_data(query):
         return pd.read_sql(query, conn)
+
+
     """Получим данные"""
     conn = init_connection()
     delivery_data = get_data("""select delivery2_user_id as user_id
@@ -47,7 +49,7 @@ with st.echo(code_location='below'):
     districts_pd = pd.read_csv('mos_poly.csv')
     geodistricts = GSPD.GeoDataFrame(districts_pd, geometry=districts_pd['geometry'].apply(loads))
 
-    geodata=geodata.sjoin(geodistricts[['geometry','local_name']], how='left')
+    geodata = geodata.sjoin(geodistricts[['geometry', 'local_name']], how='left')
     st.dataframe(geodata[:10].drop('geometry', axis=1))
 
     """
@@ -56,9 +58,8 @@ with st.echo(code_location='below'):
 
     options = st.selectbox('Выберете ресторан:', delivery_data['vendor'].unique())
 
-
-    drow_products = geodata[geodata['vendor']==options].groupby('local_name', as_index=False)['user_id'].count()
-    geojson='mos_districts.geojson'
+    drow_products = geodata[geodata['vendor'] == options].groupby('local_name', as_index=False)['user_id'].count()
+    geojson = 'mos_districts.geojson'
     ## From (Дз 13)
     map = folium.Map(location=[55.753544, 37.621211], zoom_start=10)
     cho = folium.Choropleth(geo_data=geojson, data=drow_products, columns=['local_name', 'user_id']
@@ -69,7 +70,6 @@ with st.echo(code_location='below'):
                             ).add_to(map)
 
     folium_static(map, width=800)
-
 
     ##
     """Если вам это кажется знакомым, то вам не кажется, что-то похожее я делал в проекте по визуализации, 
@@ -83,16 +83,12 @@ with st.echo(code_location='below'):
 
     options_for_graph = st.selectbox('Выберете ресторан:', delivery_data['vendor'].unique(), key='jkhgjhffjghkjlk')
 
-    users_of_vendor= delivery_data[delivery_data['vendor']==options_for_graph]['user_id'].unique()
-    df_for_graf=pd.DataFrame(delivery_data[delivery_data['user_id'].isin(users_of_vendor)]['vendor'].drop_duplicates().reset_index(drop=True).dropna())
-    df_for_graf['from']=df_for_graf.loc[0, 'vendor']
+    users_of_vendor = delivery_data[delivery_data['vendor'] == options_for_graph]['user_id'].unique()
+    df_for_graf = pd.DataFrame(
+        delivery_data[delivery_data['user_id'].isin(users_of_vendor)]['vendor'].drop_duplicates().reset_index(
+            drop=True).dropna())
+    df_for_graf['from'] = df_for_graf.loc[0, 'vendor']
     df_for_graf.drop(0, axis=0, inplace=True)
     st.dataframe(df_for_graf)
-    graph = nx.DiGraph([df_for_graf['from'].tolist(), df_for_graf['vendor'].tolist()])
+    graph = nx.DiGraph([(frm, to) for frm, to in zip(df_for_graf['from'], df_for_graf['vendor'] )])
     nx.draw(graph)
-
-
-
-
-
-
