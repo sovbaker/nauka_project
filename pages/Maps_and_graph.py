@@ -7,7 +7,7 @@ from shapely.wkt import loads
 from streamlit_folium import folium_static
 import networkx as nx
 from pyvis.network import Network
-"""# Здесь мы будем рисовать карту"""
+"""# Здесь мы будем рисовать карту и граф"""
 
 
 with st.echo(code_location='below'):
@@ -83,9 +83,8 @@ with st.echo(code_location='below'):
 
     options_for_graph = st.selectbox('Выберете ресторан:', delivery_data['vendor'].unique(), key='jkhgjhffjghkjlk')
 
-    df_for_graf=(delivery_data[delivery_data['vendor']==options_for_graph]
-                 .groupby(['user_id', 'vendor'], as_index=False)
-                 .count()
+    users_of_vendor= delivery_data[delivery_data['vendor']==options_for_graph]['user_id'].unique()
+    df_for_graf=(delivery_data[delivery_data['user_id'].isin(users_of_vendor)]['vendor']
                  .drop_duplicates(subset=['vendor']))
 
     st.dataframe(df_for_graf)
