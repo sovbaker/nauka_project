@@ -49,5 +49,13 @@ with st.echo(code_location='below'):
     geodata=geodata.sjoin(geodistricts[['geometry','local_name']], how='left')
     st.table(geodata[:10])
 
+    """
+    Посмотрим в каких районах из каких ресторанов больше заказывают еду
+    """
+    options = st.selectbox('Выберете ресторан:', delivery_data['vendor'].unique())
+
+    st.write(geodata[geodata['vendor']==options].groupby('local_name', as_index=False)['user_id'].count())
+
+
 
 
