@@ -50,8 +50,8 @@ with st.echo(code_location='below'):
     """
     figure=go.Figure()
     figure.add_trace(go.Scatter(x=vybory_df['avg_spend'], y=vybory_df['umg_flg'], mode='markers', opacity=0.5))
-    figure.update_layout(title="Траты людей на еду и победа кандидата от УМГ", xaxis={'label':'Средние траты'}
-                         , yaxis={'label':'Победа кандидата УМГ'})
+    figure.update_layout(title="Траты людей на еду и победа кандидата от УМГ", xaxis={'title':'Средние траты'}
+                         , yaxis={'title':'Победа кандидата УМГ'})
     st.plotly_chart(figure)
 
     '''Построим простую логистическую регресию по этим данным'''
