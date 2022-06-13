@@ -34,7 +34,7 @@ with st.echo(code_location='below'):
 
     """### Выгрузим из базы данных таблицу УИК и пользователями деливери"""
 
-    vybory_df =get_data('''select uik, sum(delivery2_price_client_rub) as avg_spend
+    vybory_df =get_data('''select uik, avg (delivery2_price_client_rub) as avg_spend
                             , avg(umg_flg::numeric) as umg_flg 
                             from(select * from delivery a
                                 left join vybory b using (uik)) as a
@@ -58,3 +58,13 @@ with st.echo(code_location='below'):
     model=smf.logit('umg_flg~avg_spend', data=vybory_df).fit()
 
     st.write(model.summary())
+
+    """Как можно видеть наша модель показывыает хоть и положительный коэффициент при средних тратах
+    , но очень маленький, практически нулевой - это означает, что мы не учитываем какие-то факторы
+    , поэтому мы спустимся на уровень ниже посмотрим 
+    на конкретных пользователей и добавим информации о них: из каких ресторанов человек чаще заказывал
+    еду, марку его автомобиля, год его рождения, год выпуска автомобиля
+    ,"""
+    vybory_df_2=get_data('''select * from delivery a
+                                left join vybory b using (uik)
+                                group by 1''')
