@@ -85,8 +85,8 @@ with st.echo(code_location='below'):
 
     df_for_graf=(delivery_data[delivery_data['vendor']==options_for_graph]
                  .groupby(['user_id'], as_index=False)['vendor']
-                 .count()['vendor']
-                 .drop_dupicates())
+                 .count()
+                 .drop_dupicates(subset=['vendor']))
 
     st.dataframe(df_for_graf)
 
