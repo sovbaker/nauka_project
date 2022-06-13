@@ -43,8 +43,11 @@ with st.echo(code_location='below'):
     """С помощью геопанадаса создадим геодатафрейм, а с помощью api osm-boundaries получим районы заказов"""
     geodata = GSPD.GeoDataFrame(delivery_data, geometry=GSPD.points_from_xy(delivery_data['lon'], delivery_data['lat']))
 
-    districts_pd=pd.read_csv('mos_poly.csv')
+    districts_pd = pd.read_csv('pages/mos_poly.csv')
     geodistricts = GSPD.GeoDataFrame(districts_pd, geometry=districts_pd['geometry'].apply(loads))
 
     geodata=geodata.sjoin(geodistricts, how='left')
     st.write(geodata)
+
+
+
