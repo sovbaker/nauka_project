@@ -2,8 +2,8 @@ import streamlit as st
 import psycopg2
 import pandas as pd
 import plotly.graph_objects as go
-import statsmodels.api
-import statsmodels.formula.api
+import statsmodels.api as sm
+import statsmodels.formula.api as smf
 st.set_page_config(layout="wide")
 
 st.markdown("""
@@ -53,3 +53,8 @@ with st.echo(code_location='below'):
     figure.update_layout(title="Траты людей на еду и победа кандидата от УМГ", xaxis={'label':'Средние траты'}
                          , yaxis={'label':'Победа кандидата УМГ'})
     st.plotly_chart(figure)
+
+    '''Построим простую логистическую регресию по этим данным'''
+    model=smf.logit('umg_flg~avg_spend', data=vybory_df).fit()
+
+    st.dataframe(model.summary())
