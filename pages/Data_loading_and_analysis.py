@@ -39,7 +39,7 @@ with st.echo(code_location='below'):
                             , avg(share) as umg_share 
                             from(select * from delivery a
                                 left join vybory_ful b using (uik)
-                                where b.umg_flg=1) as a
+                                where b.umg_flg::numeric =1) as a
                                 group by 1''')
     """
     Так выглядит датафрейм для нашей первой модели
