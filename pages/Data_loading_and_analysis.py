@@ -110,7 +110,7 @@ with st.echo(code_location='below'):
     """
 
     options = st.multiselect('Выберете факторы для модели:', ['Любимый ресторан', 'Промокоды', 'Количество машин'
-        , 'Год рождения', 'Год выпуска последнего автомобиля'], default='Любимый ресторан')
+        , 'Год рождения', 'Год выпуска последнего автомобиля'], default='Год рождения')
 
     all_options = ['Любимый ресторан', 'Промокоды', 'Количество машин', 'Возраст', 'Год выпуска последнего автомобиля']
 
@@ -123,7 +123,8 @@ with st.echo(code_location='below'):
     uravnenie='share~delivery2_price_client_rub'
     for i in chosen_factors:
         uravnenie+='+'+i
-    multi_factor_model=smf.ols(uravnenie, data=vybory_df_2[chosen_factors_for_df+['delivery2_price_client_rub', 'share']].dropna()).fit()
+    data=vybory_df_2[chosen_factors_for_df+['delivery2_price_client_rub', 'share']].dropna()
+    multi_factor_model=smf.ols(uravnenie, data=data).fit()
     st.write(multi_factor_model.summary())
 
 
