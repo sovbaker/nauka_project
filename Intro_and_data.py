@@ -2,9 +2,7 @@ import streamlit as st
 import psycopg2
 
 
-st.set_page_config(layout="wide", page_title='Введение и получение данных'
-                   , menu_items={'Карты и граф':'https://share.streamlit.io/sovbaker/nauka_project/Intro_and_data.py/Maps_and_graph.py',
-                                'Выгрузка и анализ данных':'https://share.streamlit.io/sovbaker/nauka_project/Intro_and_data.py/Maps_and_graph.py'})
+st.set_page_config(layout="wide", page_title='Введение и получение данных')
 
 st.markdown("""
 # Еда и выборы
