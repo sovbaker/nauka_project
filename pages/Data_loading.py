@@ -2,6 +2,8 @@ import streamlit as st
 import psycopg2
 import pandas as pd
 import plotly.graph_objects as go
+import statsmodels.api
+import statsmodels.formula.api
 st.set_page_config(layout="wide")
 
 st.markdown("""
@@ -48,6 +50,6 @@ with st.echo(code_location='below'):
     """
     figure=go.Figure()
     figure.add_trace(go.Scatter(x=vybory_df['avg_spend'], y=vybory_df['umg_flg'], mode='markers', opacity=0.5))
-    figure.update_layout(title="Траты людей на еду и победа кандидата от УМГ", xaxis={'name':'Средние траты'}
-                         , yaxis={'name':'Победа кандидата УМГ'})
+    figure.update_layout(title="Траты людей на еду и победа кандидата от УМГ", xaxis={'label':'Средние траты'}
+                         , yaxis={'label':'Победа кандидата УМГ'})
     st.plotly_chart(figure)

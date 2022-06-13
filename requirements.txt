@@ -17,3 +17,4 @@ pydeck
 numpy
 streamlit_echarts
 streamlit_folium==0.6.13
+statsmodels
