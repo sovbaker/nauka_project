@@ -84,8 +84,7 @@ with st.echo(code_location='below'):
     options_for_graph = st.selectbox('Выберете ресторан:', delivery_data['vendor'].unique(), key='jkhgjhffjghkjlk')
 
     users_of_vendor= delivery_data[delivery_data['vendor']==options_for_graph]['user_id'].unique()
-    df_for_graf=(delivery_data[delivery_data['user_id'].isin(users_of_vendor)]['vendor']
-                 .drop_duplicates(subset=['vendor']))
+    df_for_graf=(delivery_data[delivery_data['user_id'].isin(users_of_vendor)]['vendor'].drop_duplicates())
 
     st.dataframe(df_for_graf)
 
