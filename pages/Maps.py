@@ -5,6 +5,7 @@ import streamlit as st
 import pandas as pd
 import psycopg2
 from shapely.wkt import loads
+from streamlit_folium import folium_static
 """# Здесь мы будем рисвать карты"""
 
 
@@ -54,8 +55,17 @@ with st.echo(code_location='below'):
     """
     options = st.selectbox('Выберете ресторан:', delivery_data['vendor'].unique())
 
-    st.write(geodata[geodata['vendor']==options].groupby('local_name', as_index=False)['user_id'].count())
+    drow_products = geodata[geodata['vendor']==options].groupby('local_name', as_index=False)['user_id'].count()
+    geojson='mos_districts.geojson'
 
+    map = folium.Map(location=[55.753544, 37.621211], zoom_start=10, width=1200)
+    cho = folium.Choropleth(geo_data=geojson, data=drow_products, columns=['local_name', 'user_id']
+                            , key_on='feature.properties.local_name'
+                            , fill_color='YlOrRd'
+                            , nan_fill_color="White"
+                            , legend_name='Количество заказов'
+                            ).add_to(map)
+    folium_static(map, width=1200)
 
 
 
