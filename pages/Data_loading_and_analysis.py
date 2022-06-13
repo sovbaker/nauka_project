@@ -88,6 +88,8 @@ with st.echo(code_location='below'):
     left join (select phone_number, sum(case when delivery2_promocode is null then 0 else 1 end) as promo_use_cnt from delivery_full group by 1) as s using(phone_number)
     left join (select distinct phone_number, delivery2_vendor_name as most_common_vendor
     from(select phone_number, delivery2_vendor_name, count(*) as freq from delivery_full group by 1,2 order by 3) as b) as v using (phone_number)
+    left join (select uik, share from vybory_ful where b.umg_flg::numeric=1) as vyb b using (uik)
+                                
     ''')
 
     vybory_df_2['car_cnt'].fillna(0, inplace=True)
