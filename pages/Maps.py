@@ -6,7 +6,7 @@ import pandas as pd
 
 """# Здесь мы будем рисвать карты"""
 
-st.set_page_config(layout='wide')
+
 
 with st.echo(code_location='below'):
     @st.experimental_singleton
@@ -39,6 +39,8 @@ with st.echo(code_location='below'):
                                 , delivery2_longitude as lon
                                 from delivery_full""")
     st.dataframe(delivery_data[:100])
+
+
 
 
 
