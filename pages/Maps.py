@@ -39,7 +39,6 @@ with st.echo(code_location='below'):
                                 , delivery2_latitude as lat
                                 , delivery2_longitude as lon
                                 from delivery_full""")
-    st.write(delivery_data[:100])
 
     """С помощью геопанадаса создадим геодатафрейм, а с помощью api osm-boundaries получим районы заказов"""
     geodata = GSPD.GeoDataFrame(delivery_data, geometry=GSPD.points_from_xy(delivery_data['lon'], delivery_data['lat']))
