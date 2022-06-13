@@ -91,4 +91,5 @@ with st.echo(code_location='below'):
     df_for_graf.drop(0, axis=0, inplace=True)
     st.dataframe(df_for_graf)
     graph = nx.DiGraph([(frm, to) for frm, to in zip(df_for_graf['from'], df_for_graf['vendor'] )])
-    nx.draw(graph)
+    st.pyplot(nx.draw(graph))
+
