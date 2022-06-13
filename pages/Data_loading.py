@@ -47,5 +47,5 @@ with st.echo(code_location='below'):
     а фичей средние траты тех, кто должен был голосовать в этом УИКе
     """
     figure=go.Figure()
-    figure.add_trace(go.Scatter(x=vybory_df['avg_spend'], y=vybory_df['umg_flg']))
+    figure.add_trace(go.Scatter(x=vybory_df['avg_spend'], y=vybory_df['umg_flg'], mode='markers'))
     st.plotly_chart(figure)
