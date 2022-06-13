@@ -32,6 +32,7 @@ with st.echo(code_location='below'):
 
     """### Выгрузим из базы данных таблицу УИК и пользователями деливери"""
 
-    get_data('''select * from delivery a
+    vybory_df =get_data('''select * from delivery a
                  left join vybory b using (uik)''')
+    st.dataframe(vybory_df.loc[:, 'delivery2_price_client_rub':])
 
