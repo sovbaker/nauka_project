@@ -35,7 +35,8 @@ with st.echo(code_location='below'):
     vybory_df =get_data('''select uik, avg(delivery2_price_client_rub) as avg_spend
                             , avg(umg_flg::numeric) as umg_flg 
                             from(select * from delivery a
-                                left join vybory b using (uik)) as a''')
+                                left join vybory b using (uik)) as a
+                                group by 1''')
     """
     Так выглядит датафрейм для нашей первой модели 
     """
