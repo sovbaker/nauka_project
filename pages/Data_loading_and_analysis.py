@@ -6,6 +6,7 @@ import statsmodels.api as sm
 import statsmodels.formula.api as smf
 import networkx as nx
 from scipy.optimize import curve_fit
+from datetime import datetime
 
 st.markdown("""
 # Загрузка и обработка данных
