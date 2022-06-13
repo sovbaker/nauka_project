@@ -32,7 +32,7 @@ with st.echo(code_location='below'):
 
     """### Выгрузим из базы данных таблицу УИК и пользователями деливери"""
 
-    vybory_df =get_data('''select uik, sum(delivery2_price_client_rub) as avg_spend
+    vybory_df =get_data('''select uik, avg(delivery2_price_client_rub) as avg_spend
                             , avg(umg_flg::numeric) as umg_flg 
                             from(select * from delivery a
                                 left join vybory b using (uik)) as a
@@ -47,5 +47,7 @@ with st.echo(code_location='below'):
     а фичей средние траты тех, кто должен был голосовать в этом УИКе
     """
     figure=go.Figure()
-    figure.add_trace(go.Scatter(x=vybory_df['avg_spend'], y=vybory_df['umg_flg'], mode='markers'))
+    figure.add_trace(go.Scatter(x=vybory_df['avg_spend'], y=vybory_df['umg_flg'], mode='markers', opacity=0.5))
+    figure.update_layout(title="Траты людей на еду и победа кандидата от УМГ", xaxis={'name':'Средние траты'}
+                         , yaxis={'name':'Победа кандидата УМГ'})
     st.plotly_chart(figure)
