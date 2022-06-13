@@ -71,15 +71,32 @@ with st.echo(code_location='below'):
 
     st.write(model.summary())
 
-
-
-    """Как можно видеть наша модель показывыает хоть и положительный коэффициент при средних тратах
+    """
+    
+    Как можно видеть наша модель показывыает хоть и положительный коэффициент при средних тратах
     , но очень маленький, практически нулевой - это означает, что мы не учитываем какие-то факторы
-    , поэтому мы спустимся на уровень ниже посмотрим 
+    , поэтому мы спустимся на уровень ниже и посмотрим 
     на конкретных пользователей и добавим информации о них: из каких ресторанов человек чаще заказывал
-    еду, марку его автомобиля, год его рождения, год выпуска автомобиля
-    ,"""
+    еду, как часто человек использовал промокоды, cколько у него машин, год его рождения, год выпуска автомобиля
+    
+    """
 
-    # vybory_df_2=get_data('''select * from delivery a
-    #                             left join vybory b using (uik)
-    #                             group by 1''')
+    vybory_df_2=get_data('''select * from delivery 
+    left join (select phone_number, count(distinct gibdd2_car_model) as car_cnt, max(gibdd2_car_year) as car_year,gibdd2_dateofbirth::date as birth_day 
+    from  gibdd group by 1, gibdd2_dateofbirth) as gibd using(phone_number)
+    left join (select phone_number, sum(case when delivery2_promocode is null then 0 else 1 end) as promo_use_cnt from delivery_full group by 1) as s using(phone_number)
+    left join (select distinct phone_number, delivery2_vendor_name as most_common_vendor
+    from(select phone_number, delivery2_vendor_name, count(*) as freq from delivery_full group by 1,2 order by 3) as b) as v using (phone_number)
+    ''')
+
+    vybory_df_2['car_cnt'].fillna(0, inplace=True)
+
+    """
+    #### Теперь создадим многофакторную модель. 
+    
+    Какие факторы в нее включать вы решаете сами
+    """
+
+
+
+
