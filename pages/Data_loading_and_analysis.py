@@ -94,7 +94,7 @@ with st.echo(code_location='below'):
     vybory_df_2['birth_day']=pd.to_datetime(vybory_df_2['birth_day'])
     ##FROM (https://moonbooks.org/Articles/How-to-convert-a-dataframe-column-of-date-of-birth-DOB-to-column-of-age-with-pandas-in-python-/)
     def from_dob_to_age(born):
-        today = datetime.date.today()
+        today = datetime.today()
         return today.year - born.year - ((today.month, today.day) < (born.month, born.day))
 
     vybory_df_2['age']=vybory_df_2['birth_day'].apply(from_dob_to_age)
