@@ -6,6 +6,7 @@ import psycopg2
 from shapely.wkt import loads
 from streamlit_folium import folium_static
 import networkx as nx
+import matplotlib.pyplot
 from pyvis.network import Network
 
 """# Здесь мы будем рисовать карту и граф"""
