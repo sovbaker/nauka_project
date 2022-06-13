@@ -34,7 +34,7 @@ with st.echo(code_location='below'):
 
     """### Выгрузим из базы данных таблицу УИК и пользователями деливери"""
 
-    vybory_df =get_data('''select uik, avg(delivery2_price_client_rub) as avg_spend
+    vybory_df =get_data('''select uik, sum(delivery2_price_client_rub) as avg_spend
                             , avg(umg_flg::numeric) as umg_flg 
                             from(select * from delivery a
                                 left join vybory b using (uik)) as a
@@ -57,4 +57,4 @@ with st.echo(code_location='below'):
     '''Построим простую логистическую регресию по этим данным'''
     model=smf.logit('umg_flg~avg_spend', data=vybory_df).fit()
 
-    st.dataframe(model.summary())
+    st.write(model.summary())
