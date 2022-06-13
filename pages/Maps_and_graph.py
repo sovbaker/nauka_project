@@ -87,7 +87,7 @@ with st.echo(code_location='below'):
     df_for_graf=pd.DataFrame(delivery_data[delivery_data['user_id'].isin(users_of_vendor)]['vendor'].drop_duplicates().reset_index(drop=True).dropna())
     df_for_graf['from']=df_for_graf.loc[0, 'vendor']
     df_for_graf.drop(0, axis=0, inplace=True)
-    st.dataframe(df_for_graf)
+    st.dataframe(df_for_graf.to_numpy())
 
     graph = nx.DiGraph(df_for_graf)
     nx.draw(graph)
