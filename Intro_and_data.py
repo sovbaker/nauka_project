@@ -358,7 +358,9 @@ vybory = df_vybory.sort_values('value', ascending=False).drop_duplicates(['uik',
 В итоге мы получили датафрейм где, для каждого УИКа мы знаем победил ли на нем кандидат Умного голосования 
 
 ### Хранение данных
-Все 
+Все данные будут храниться в базе данных sql 
+
+
 """)
 
 with st.echo(code_location='below'):
