@@ -40,10 +40,11 @@ with st.echo(code_location='below'):
     """
     Так выглядит датафрейм для нашей первой модели 
     """
+    vybory_df['umg_flg']=vybory_df['umg_flg'].fillna(0)
     st.dataframe(vybory_df)
     """
     В нашей модели зависимой переменной будет факт того, что люди проголосовали за кандидата умного голосования,
     а фичей средние траты тех, кто должен был голосовать в этом УИКе
     """
     figure=go.Figure()
-    figure.add_trace(x=vybory_df['avg_spend'], y=vybory_df['umg_flg'])
+    figure.add_trace(go.Scatter(x=vybory_df['avg_spend'], y=vybory_df['umg_flg']))
