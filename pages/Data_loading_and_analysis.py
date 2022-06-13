@@ -36,27 +36,28 @@ with st.echo(code_location='below'):
     """### Выгрузим из базы данных таблицу УИК и пользователями деливери"""
 
     vybory_df =get_data('''select uik, avg (delivery2_price_client_rub) as avg_spend
-                            , avg(umg_flg::numeric) as umg_flg 
+                            , avg(share) as umg_share 
                             from(select * from delivery a
-                                left join vybory b using (uik)) as a
+                                left join vybory_full b using (uik)
+                                where b.umg_flg=1) as a
                                 group by 1''')
     """
     Так выглядит датафрейм для нашей первой модели
     """
-    vybory_df['umg_flg']=vybory_df['umg_flg'].fillna(0)
     st.dataframe(vybory_df)
     """
-    В нашей модели зависимой переменной будет факт того, что люди проголосовали за кандидата умного голосования,
+    В нашей модели зависимой переменной будет доля голосов за кандидата умного голосования,
     а фичей средние траты тех, кто должен был голосовать в этом УИКе
+    
     """
     figure=go.Figure()
-    figure.add_trace(go.Scatter(x=vybory_df['avg_spend'], y=vybory_df['umg_flg'], mode='markers', opacity=0.5))
+    figure.add_trace(go.Scatter(x=vybory_df['avg_spend'], y=vybory_df['umg_share'], mode='markers', opacity=1))
     figure.update_layout(title="Траты людей на еду и победа кандидата от УМГ", xaxis={'title':'Средние траты'}
-                         , yaxis={'title':'Победа кандидата УМГ'})
+                         , yaxis={'title':'Доля голосов кандидата УМГ'})
     st.plotly_chart(figure)
 
     '''Построим простую логистическую регресию по этим данным'''
-    model=smf.logit('umg_flg~avg_spend', data=vybory_df).fit()
+    model=smf.ols('umg_share~avg_spend', data=vybory_df).fit()
 
     st.write(model.summary())
 
