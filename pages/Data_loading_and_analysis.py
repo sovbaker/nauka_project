@@ -40,7 +40,7 @@ with st.echo(code_location='below'):
                             from(select * from delivery a
                                 left join vybory_ful b using (uik)
                                 where b.umg_flg::numeric =1) as a
-                                group by 1''')
+                                group by 1''').dropna()
     """
     Так выглядит датафрейм для нашей первой модели
     """
