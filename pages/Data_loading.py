@@ -32,7 +32,7 @@ with st.echo(code_location='below'):
 
     """### Выгрузим из базы данных таблицу УИК и пользователями деливери"""
 
-    run_query('''drop table delivery_x_uiks if exists;
+    run_query('''drop table if exists delivery_x_uiks;
                 create table delivery_x_uiks  as
                 select * from delivery a
                  left join vybory b on using (uik)''')
