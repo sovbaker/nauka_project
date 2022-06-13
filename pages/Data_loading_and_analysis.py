@@ -118,7 +118,7 @@ with st.echo(code_location='below'):
     chosen_options=[all_options.index(x) for x in options]
     chosen_factors=[all_factors[x] for x in chosen_options]
     chosen_factors_for_df=[all_factors_for_df[x] for x in chosen_options]
-    uravnenie='share~avg_spend'
+    uravnenie='share~delivery2_price_client_rub'
     for i in chosen_factors:
         uravnenie+='+'+i
     multi_factor_model=smf.ols(uravnenie, data=vybory_df_2[chosen_factors_for_df].dropna()).fit()
