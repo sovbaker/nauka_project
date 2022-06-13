@@ -1,7 +1,7 @@
 import streamlit as st
 import psycopg2
 import pandas as pd
-
+import plotly.graph_objects as go
 st.set_page_config(layout="wide")
 
 st.markdown("""
@@ -32,7 +32,17 @@ with st.echo(code_location='below'):
 
     """### Выгрузим из базы данных таблицу УИК и пользователями деливери"""
 
-    vybory_df =get_data('''select * from delivery a
-                 left join vybory b using (uik)''')
-    st.dataframe(vybory_df.loc[:, 'delivery2_price_client_rub':])
-
+    vybory_df =get_data('''select uik, avg(delivery2_price_client_rub) as avg_spend
+                            , avg(umg_flg::numeric) as umg_flg 
+                            from(select * from delivery a
+                                left join vybory b using (uik)) as a''')
+    """
+    Так выглядит датафрейм для нашей первой модели 
+    """
+    st.dataframe(vybory_df)
+    """
+    В нашей модели зависимой переменной будет факт того, что люди проголосовали за кандидата умного голосования,
+    а фичей средние траты тех, кто должен был голосовать в этом УИКе
+    """
+    figure=go.Figure()
+    figure.add_trace(x=vybory_df['avg_spend'], y=vybory_df['umg_flg'])
