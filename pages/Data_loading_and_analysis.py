@@ -90,13 +90,31 @@ with st.echo(code_location='below'):
     ''')
 
     vybory_df_2['car_cnt'].fillna(0, inplace=True)
+    vybory_df_2['birth_day']=pd.to_datetime(vybory_df_2['birth_day']).astype('datetime[D]')
+    ##FROM (https://moonbooks.org/Articles/How-to-convert-a-dataframe-column-of-date-of-birth-DOB-to-column-of-age-with-pandas-in-python-/)
+    def from_dob_to_age(born):
+        today = datetime.date.today()
+        return today.year - born.year - ((today.month, today.day) < (born.month, born.day))
+
+    vybory_df_2['age']=vybory_df_2['birth_day'].apply(from_dob_to_age)
+    ##
+
 
     """
     #### Теперь создадим многофакторную модель. 
     
-    Какие факторы в нее включать вы решаете сами
+    Какие факторы в нее включать вы решаете сами, единственный фактор, который будет всегда это средние траты
     """
 
+    options = st.multiselect('Выберете факторы для модели:', ['Любимый ресторан', 'Промокоды', 'Количество машин'
+        , 'Год рождения', 'Год выпуска последнего автомобиля'])
+
+    all_options = ['Любимый ресторан', 'Промокоды', 'Количество машин', 'Возраст', 'Год выпуска последнего автомобиля']
+
+    all_factors = ['C(most_common_vendor)', 'C(promo_use_cnt)', 'cars_cnt', 'age', 'C(car_year)']
+    all_factors_for_df = ['most_common_vendor', 'promo_use_cnt', 'cars_cnt', 'age', 'car_year']
+
+    
 
 
 
