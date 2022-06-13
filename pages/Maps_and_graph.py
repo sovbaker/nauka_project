@@ -88,7 +88,6 @@ with st.echo(code_location='below'):
     df_for_graf['from']=df_for_graf.loc[0, 'vendor']
     df_for_graf.drop(0, axis=0, inplace=True)
     st.dataframe(df_for_graf.to_numpy())
-
     graph = nx.DiGraph(df_for_graf)
     nx.draw(graph)
 
