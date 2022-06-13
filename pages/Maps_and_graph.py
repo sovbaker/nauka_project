@@ -1,11 +1,11 @@
 import geopandas as GSPD
 import folium
-import requests
 import streamlit as st
 import pandas as pd
 import psycopg2
 from shapely.wkt import loads
 from streamlit_folium import folium_static
+import networkx as nx
 """# Здесь мы будем рисовать карту"""
 
 
@@ -52,9 +52,8 @@ with st.echo(code_location='below'):
     """
     Посмотрим в каких районах из каких ресторанов больше заказывают еду
     """
-    col1, col2 = st.columns(2)
-    with col1:
-        options = st.selectbox('Выберете ресторан:', delivery_data['vendor'].unique())
+
+    options = st.selectbox('Выберете ресторан:', delivery_data['vendor'].unique())
 
 
     drow_products = geodata[geodata['vendor']==options].groupby('local_name', as_index=False)['user_id'].count()
@@ -74,6 +73,10 @@ with st.echo(code_location='below'):
     ##
     """Если вам это кажется знакомым, то вам не кажется, что-то похожее я делал в проекте по визуализации, 
     но там я почти не использовал геопандас, поэтому код отличается """
+
+    """Теперь сделаем граф со связями ресторанов между собой"""
+
+    options_for_graph = st.selectbox('Выберете ресторан:', delivery_data['vendor'].unique())
 
 
 

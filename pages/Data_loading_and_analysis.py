@@ -66,7 +66,7 @@ with st.echo(code_location='below'):
                          , yaxis={'title':'Доля голосов кандидата УМГ'})
     st.plotly_chart(figure)
 
-    '''Построим простую логистическую регресию по этим данным'''
+    '''Построим простую линейную регресию по этим данным'''
     model=smf.ols('umg_share~avg_spend', data=vybory_df).fit()
 
     st.write(model.summary())
