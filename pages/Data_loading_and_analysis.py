@@ -99,7 +99,7 @@ with st.echo(code_location='below'):
 
     vybory_df_2['age']=vybory_df_2['birth_day'].apply(from_dob_to_age)
     ##
-
+    st.write(vybory_df_2[:10])
 
     """
     #### Теперь создадим многофакторную модель. 
