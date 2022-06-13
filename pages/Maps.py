@@ -46,8 +46,8 @@ with st.echo(code_location='below'):
     districts_pd = pd.read_csv('mos_poly.csv')
     geodistricts = GSPD.GeoDataFrame(districts_pd, geometry=districts_pd['geometry'].apply(loads))
 
-    geodata=geodata.sjoin(geodistricts, how='left')
-    st.write(geodata)
+    geodata=geodata.sjoin(geodistricts[['geometry','local_name']], how='left')
+    st.table(geodata[:10])
 
 
 
