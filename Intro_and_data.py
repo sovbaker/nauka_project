@@ -1,23 +1,8 @@
-import altair as alt
-import folium
-import geopandas as gpd
-import numpy as np
-import pandas as pd
-import plotly.graph_objects as go
-import pydeck as pdk
 import streamlit as st
-from folium.plugins import FastMarkerCluster
-from geopy import distance
-from shapely.geometry import Point
-from streamlit_echarts import st_echarts
-from streamlit_folium import folium_static
-from supabase import create_client, Client
 import psycopg2
-import rtree
-import pygeos
-import requests
 
-st.set_page_config(layout="wide")
+
+st.set_page_config(layout="wide", page_title='Введение и получение данных')
 
 st.markdown("""
 # Еда и выборы
@@ -362,4 +347,5 @@ vybory = df_vybory.sort_values('value', ascending=False).drop_duplicates(['uik',
 
 
 """)
+
 

@@ -80,6 +80,7 @@ with st.echo(code_location='below'):
     на конкретных пользователей и добавим информации о них: из каких ресторанов человек чаще заказывал
     еду, марку его автомобиля, год его рождения, год выпуска автомобиля
     ,"""
-    # vybory_df_2=get_data('''select * from delivery a
-    #                             left join vybory b using (uik)
-    #                             group by 1''')
+
+    vybory_df_2=get_data('''select * from delivery a
+                                left join vybory b using (uik)
+                                group by 1''')
