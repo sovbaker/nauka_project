@@ -5,6 +5,7 @@ import plotly.graph_objects as go
 import statsmodels.api as sm
 import statsmodels.formula.api as smf
 import networkx as nx
+from scipy.optimize import curve_fit
 st.set_page_config(layout="wide")
 
 st.markdown("""
@@ -49,9 +50,19 @@ with st.echo(code_location='below'):
     В нашей модели зависимой переменной будет доля голосов за кандидата умного голосования,
     а фичей средние траты тех, кто должен был голосовать в этом УИКе
     
+    Я **нетривиально** визуализирую данные с помощью plotly.graph_objects и с помощью
+     **математического модуля scipy** найду функцию линейной регрессии и нарисую на графике
+    
     """
+    def linear_func(x,a,b):
+        return a*x + b
+
+    popt, pcov = curve_fit(linear_func, vybory_df['avg_spend'], vybory_df['umg_share'])
+
+
     figure=go.Figure()
-    figure.add_trace(go.Scatter(x=vybory_df['avg_spend'], y=vybory_df['umg_share'], mode='markers', opacity=1))
+    figure.add_trace(go.Scatter(x=vybory_df['avg_spend'], y=vybory_df['umg_share'], mode='markers', opacity=1, name='data'))
+    figure.add_trace(go.Scatter(x=vybory_df['avg_spend'], y=linear_func(vybory_df['avg_spend'], *popt), mode='lines', name='fit'))
     figure.update_layout(title="Траты людей на еду и победа кандидата от УМГ", xaxis={'title':'Средние траты'}
                          , yaxis={'title':'Доля голосов кандидата УМГ'})
     st.plotly_chart(figure)
@@ -60,6 +71,8 @@ with st.echo(code_location='below'):
     model=smf.ols('umg_share~avg_spend', data=vybory_df).fit()
 
     st.write(model.summary())
+
+
 
     """Как можно видеть наша модель показывыает хоть и положительный коэффициент при средних тратах
     , но очень маленький, практически нулевой - это означает, что мы не учитываем какие-то факторы
