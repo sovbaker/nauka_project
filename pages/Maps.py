@@ -58,14 +58,14 @@ with st.echo(code_location='below'):
     drow_products = geodata[geodata['vendor']==options].groupby('local_name', as_index=False)['user_id'].count()
     geojson='mos_districts.geojson'
 
-    map = folium.Map(location=[55.753544, 37.621211], zoom_start=10, width=1200)
+    map = folium.Map(location=[55.753544, 37.621211], zoom_start=10, width=100%, height=100%)
     cho = folium.Choropleth(geo_data=geojson, data=drow_products, columns=['local_name', 'user_id']
                             , key_on='feature.properties.local_name'
                             , fill_color='YlOrRd'
                             , nan_fill_color="White"
                             , legend_name='Количество заказов'
                             ).add_to(map)
-    folium_static(map, width=1200)
+    folium_static(map, width=800)
 
 
 
