@@ -80,6 +80,6 @@ with st.echo(code_location='below'):
     еду, марку его автомобиля, год его рождения, год выпуска автомобиля
     ,"""
 
-    vybory_df_2=get_data('''select * from delivery a
-                                left join vybory b using (uik)
-                                group by 1''')
+    # vybory_df_2=get_data('''select * from delivery a
+    #                             left join vybory b using (uik)
+    #                             group by 1''')

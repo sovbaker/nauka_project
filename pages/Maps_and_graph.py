@@ -84,9 +84,15 @@ with st.echo(code_location='below'):
     options_for_graph = st.selectbox('Выберете ресторан:', delivery_data['vendor'].unique(), key='jkhgjhffjghkjlk')
 
     users_of_vendor= delivery_data[delivery_data['vendor']==options_for_graph]['user_id'].unique()
-    df_for_graf=(delivery_data[delivery_data['user_id'].isin(users_of_vendor)]['vendor'].drop_duplicates().reset_index(drop=True).dropna())
-
+    df_for_graf=pd.DataFrame(delivery_data[delivery_data['user_id'].isin(users_of_vendor)]['vendor'].drop_duplicates().reset_index(drop=True).dropna())
+    df_for_graf['from']=df_for_graf.loc[0, 'vendor']
+    df_for_graf.drop(0, axis=0, inplace=True)
     st.dataframe(df_for_graf)
+
+    graph = nx.DiGraph(df_for_graf)
+    nx.draw(graph)
+
+
 
 
 
