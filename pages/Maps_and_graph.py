@@ -81,7 +81,7 @@ with st.echo(code_location='below'):
     Он будет показывать рестораны, для каждого ресторана, из каких еще ресторанов заказывают те, кто пользуется этим рестораном
     """
 
-    options = st.selectbox('Выберете ресторан:', delivery_data['vendor'].unique())
+    options_for_graph = st.selectbox('Выберете ресторан:', delivery_data['vendor'].unique(), key='jkhgjhffjghkjlk')
 
     df_for_graf=(delivery_data[delivery_data['vendor']==options_for_graph]
                  .groupby(['user_id'], as_index=False)['vendor']
