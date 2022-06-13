@@ -121,7 +121,7 @@ with st.echo(code_location='below'):
     uravnenie='share~delivery2_price_client_rub'
     for i in chosen_factors:
         uravnenie+='+'+i
-    multi_factor_model=smf.ols(uravnenie, data=vybory_df_2[chosen_factors_for_df].dropna()).fit()
+    multi_factor_model=smf.ols(uravnenie, data=vybory_df_2[chosen_factors_for_df+['delivery2_price_client_rub']].dropna()).fit()
     st.write(multi_factor_model.summary())
 
 
