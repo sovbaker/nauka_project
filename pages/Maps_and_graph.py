@@ -68,7 +68,7 @@ with st.echo(code_location='below'):
                             , nan_fill_color="White"
                             , legend_name='Количество заказов'
                             ).add_to(map)
-    folium.GeoJson(folium.GeoJsonTooltip(['user_id', 'local_name'], ['Количество заказов', 'Район'])).add_to(map)
+
     folium_static(map, width=800)
 
 
