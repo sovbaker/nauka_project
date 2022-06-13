@@ -8,6 +8,7 @@ from streamlit_folium import folium_static
 import networkx as nx
 import matplotlib.pyplot
 from pyvis.network import Network
+import streamlit.components.v1 as components
 
 """# Здесь мы будем рисовать карту и граф"""
 
@@ -90,7 +91,13 @@ with st.echo(code_location='below'):
             drop=True).dropna())
     df_for_graf['from'] = df_for_graf.loc[0, 'vendor']
     df_for_graf.drop(0, axis=0, inplace=True)
-    st.dataframe(df_for_graf)
+
     graph = nx.DiGraph([(frm, to) for frm, to in zip(df_for_graf['from'], df_for_graf['vendor'] )])
     st.pyplot(nx.draw(graph))
+    net = Network(directed=True)
+    net.from_nx(graph)
+    net.show("visualization.html")
+    HtmlFile = open('nx.html', 'r', encoding='utf-8')
+    components.html(HtmlFile.read(), height=1000, width=1000)
+
 
