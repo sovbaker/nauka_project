@@ -48,3 +48,4 @@ with st.echo(code_location='below'):
     """
     figure=go.Figure()
     figure.add_trace(go.Scatter(x=vybory_df['avg_spend'], y=vybory_df['umg_flg']))
+    st.plotly_chart(figure)
