@@ -1,7 +1,7 @@
 
 setuptools==58.1.0
 psycopg2-binary
-streamlit~=1.9.0
+streamlit~=1.10.0
 pandas~=1.4.2
 pygeos~=0.12.0
 geopandas~=0.10.2
