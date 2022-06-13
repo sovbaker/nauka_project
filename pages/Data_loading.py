@@ -27,13 +27,11 @@ with st.echo(code_location='below'):
 
 
     @st.experimental_singleton()
-    def get_data():
+    def get_data(query):
         return pd.read_sql(query, conn)
 
     """### Выгрузим из базы данных таблицу УИК и пользователями деливери"""
 
-    run_query('''drop table if exists delivery_x_uiks;
-                create table delivery_x_uiks  as
-                select * from delivery a
+    get_data('''select * from delivery a
                  left join vybory b using (uik)''')
 
