@@ -53,11 +53,14 @@ with st.echo(code_location='below'):
     """
     Посмотрим в каких районах из каких ресторанов больше заказывают еду
     """
-    options = st.selectbox('Выберете ресторан:', delivery_data['vendor'].unique())
+    col1, col2 = st.columns(2)
+    with col1:
+        options = st.selectbox('Выберете ресторан:', delivery_data['vendor'].unique())
+
 
     drow_products = geodata[geodata['vendor']==options].groupby('local_name', as_index=False)['user_id'].count()
     geojson='mos_districts.geojson'
-
+    ## From (Дз 13)
     map = folium.Map(location=[55.753544, 37.621211], zoom_start=10)
     cho = folium.Choropleth(geo_data=geojson, data=drow_products, columns=['local_name', 'user_id']
                             , key_on='feature.properties.local_name'
@@ -65,7 +68,13 @@ with st.echo(code_location='below'):
                             , nan_fill_color="White"
                             , legend_name='Количество заказов'
                             ).add_to(map)
+    folium.GeoJsonTooltip(['user_id', 'local_name'], ['Количество заказов', 'Район']).add_to(map)
     folium_static(map, width=800)
+
+
+    ##
+    """Если вам это кажется знакомым, то вам не кажется, что-то похожее я делал в проекте по визуализации, 
+    но там я почти не использовал геопандас, поэтому код отличается """
 
 
 
