@@ -6,7 +6,6 @@ import statsmodels.api as sm
 import statsmodels.formula.api as smf
 import networkx as nx
 from scipy.optimize import curve_fit
-st.set_page_config(page_title='Выгрузка данных и анализ')
 
 st.markdown("""
 # Загрузка и обработка данных

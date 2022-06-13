@@ -9,7 +9,6 @@ from streamlit_folium import folium_static
 """# Здесь мы будем рисовать карту"""
 
 
-st.set_page_config(page_title='Карты и графы', page_icon='🗺')
 with st.echo(code_location='below'):
     @st.experimental_singleton
     def init_connection():
