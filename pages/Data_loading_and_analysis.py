@@ -4,6 +4,7 @@ import pandas as pd
 import plotly.graph_objects as go
 import statsmodels.api as sm
 import statsmodels.formula.api as smf
+import networkx as nx
 st.set_page_config(layout="wide")
 
 st.markdown("""
@@ -40,7 +41,7 @@ with st.echo(code_location='below'):
                                 left join vybory b using (uik)) as a
                                 group by 1''')
     """
-    Так выглядит датафрейм для нашей первой модели 
+    Так выглядит датафрейм для нашей первой модели
     """
     vybory_df['umg_flg']=vybory_df['umg_flg'].fillna(0)
     st.dataframe(vybory_df)

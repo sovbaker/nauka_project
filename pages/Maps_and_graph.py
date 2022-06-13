@@ -6,7 +6,7 @@ import pandas as pd
 import psycopg2
 from shapely.wkt import loads
 from streamlit_folium import folium_static
-"""# Здесь мы будем рисвать карты"""
+"""# Здесь мы будем рисовать карту"""
 
 
 
@@ -75,6 +75,7 @@ with st.echo(code_location='below'):
     ##
     """Если вам это кажется знакомым, то вам не кажется, что-то похожее я делал в проекте по визуализации, 
     но там я почти не использовал геопандас, поэтому код отличается """
+
 
 
 
