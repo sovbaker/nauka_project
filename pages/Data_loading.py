@@ -35,5 +35,5 @@ with st.echo(code_location='below'):
     run_query('''drop table if exists delivery_x_uiks;
                 create table delivery_x_uiks  as
                 select * from delivery a
-                 left join vybory b on using (uik)''')
+                 left join vybory b using (uik)''')
 
