@@ -112,8 +112,8 @@ with st.echo(code_location='below'):
 
     all_options = ['Любимый ресторан', 'Промокоды', 'Количество машин', 'Возраст', 'Год выпуска последнего автомобиля']
 
-    all_factors = ['C(most_common_vendor)', 'C(promo_use_cnt)', 'cars_cnt', 'age', 'C(car_year)']
-    all_factors_for_df = ['most_common_vendor', 'promo_use_cnt', 'cars_cnt', 'age', 'car_year']
+    all_factors = ['C(most_common_vendor)', 'C(promo_use_cnt)', 'C(car_cnt)', 'age', 'C(car_year)']
+    all_factors_for_df = ['most_common_vendor', 'promo_use_cnt', 'car_cnt', 'age', 'car_year']
 
     chosen_options=[all_options.index(x) for x in options]
     chosen_factors=[all_factors[x] for x in chosen_options]
@@ -121,7 +121,7 @@ with st.echo(code_location='below'):
     uravnenie='share~avg_spend'
     for i in chosen_factors:
         uravnenie+='+'+i
-    multi_factor_model=smf.ols(uravnenie, data=vybory_df_2[chosen_factors_for_df]).fit()
+    multi_factor_model=smf.ols(uravnenie, data=vybory_df_2[chosen_factors_for_df].dropna()).fit()
     st.write(multi_factor_model.summary())
 
 
