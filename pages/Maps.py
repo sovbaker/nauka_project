@@ -47,7 +47,7 @@ with st.echo(code_location='below'):
     geodistricts = GSPD.GeoDataFrame(districts_pd, geometry=districts_pd['geometry'].apply(loads))
 
     geodata=geodata.sjoin(geodistricts[['geometry','local_name']], how='left')
-    st.table(geodata[:10])
+    st.table(geodata[:10].drop('geometry', axis=1))
 
     """
     Посмотрим в каких районах из каких ресторанов больше заказывают еду
