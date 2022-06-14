@@ -30,7 +30,7 @@ import glob
 import pandas as pd
 
 # Get CSV files list from a folder
-path = '/Users/olegbaranov/Downloads/csv/delivery2_full'
+path = '/Users/username/Downloads/csv/delivery2_full'
 csv_files = glob.glob(path + "/*.csv")
 
 # Read each CSV file into DataFrame
